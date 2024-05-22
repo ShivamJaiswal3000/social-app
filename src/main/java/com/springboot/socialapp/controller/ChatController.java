@@ -25,7 +25,8 @@ public class ChatController {
 	private ChatService chatService;
 	
 	@PostMapping("/api/chats")
-	public Chat createChat(@RequestHeader("Authorization") String jwt, @RequestBody CreateChatRequest req) throws Exception {
+	public Chat createChat(@RequestHeader("Authorization") String jwt, 
+			@RequestBody CreateChatRequest req) throws Exception {
 		User reqUser= userService.findUserByJwt(jwt);
 		User user2= userService.findUserById(req.getUserId());
 		Chat chat = chatService.createChat(reqUser, user2);

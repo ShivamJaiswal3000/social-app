@@ -48,6 +48,7 @@ public class AuthController {
 		newUser.setEmail(user.getEmail());
 		newUser.setfName(user.getfName());
 		newUser.setlName(user.getlName());
+        newUser.setGender(user.getGender());
 		newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		User savedUser=userRepository.save(newUser);
@@ -62,13 +63,23 @@ public class AuthController {
 	}
 	@PostMapping("/signin")
 	public AuthResponse signin(@RequestBody LoginRequest loginRequest) {
-		Authentication authentication=authenticate(loginRequest.getEmail(), loginRequest.getPassword());
-        
-		String token=JwtProvider.generateToken(authentication);
-		
-		AuthResponse res= new AuthResponse(token,"Login Success");
-		
-		return res ;	}
+		try {
+			Authentication authentication=authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+	        
+			String token=JwtProvider.generateToken(authentication);
+			
+			AuthResponse res= new AuthResponse(token,"Login Success");
+			
+			return res ;
+		}
+		catch(Exception e){
+			System.out.println("error "+e);
+			String token=null;
+			AuthResponse res= new AuthResponse(token,"Login failure");
+
+			return res;
+		}
+		}
 	private Authentication authenticate(String email, String password) {
 
 		UserDetails userDetails=customUserDetails.loadUserByUsername(email);

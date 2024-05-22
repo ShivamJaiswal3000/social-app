@@ -25,8 +25,9 @@ public class MessageController {
 	private UserService userService;
 	
 	@PostMapping("/api/messages/chat/{chatId}")
-	public Message createMessage(@RequestBody Message req, @RequestHeader("Authorization") String jwt
-			,@PathVariable Integer chatId) throws Exception {
+	public Message createMessage(@RequestBody Message req, 
+			@RequestHeader("Authorization") String jwt,
+			@PathVariable Integer chatId) throws Exception {
 		User user= userService.findUserByJwt(jwt);
 		Message message= messageService.createMessage(user, chatId, req);
 		return message;
